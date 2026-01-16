@@ -10,3 +10,8 @@ logging:
         journalApp:
           service:
             UserService: OFF
+
+
+weather:
+  api:
+    key: 6f866b011c4ccdb8fbcdd1aa073fc264
