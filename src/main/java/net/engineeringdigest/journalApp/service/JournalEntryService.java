@@ -21,9 +21,6 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private KafkaProducerService kafkaProducerService;
-
     @Transactional
     public void saveEntry(JournalEntry entry, String userName) {
         try{
@@ -32,15 +29,13 @@ public class JournalEntryService {
             JournalEntry saved = journalEntryRepository.save(entry);
             user.getJournalEntries().add(saved);
             userService.saveUser(user);
-            kafkaProducerService.publishJournalEvent("CREATED", saved);
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while saving the entry.", e);
         }
     }
 
       public void saveEntry(JournalEntry entry) {
-        JournalEntry saved = journalEntryRepository.save(entry);
-        kafkaProducerService.publishJournalEvent("UPDATED", saved);
+        journalEntryRepository.save(entry);
     }
 
     public List<JournalEntry> getAllEntries() {
